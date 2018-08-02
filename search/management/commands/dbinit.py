@@ -4,13 +4,14 @@ import requests
 import math
 import unicodedata
 from django.core.management.base import BaseCommand
-from ...models import Product, Category
+from django.contrib.auth.models import User
+from ...models import Product, Category, Profile
 
 class DBInit:
     """
-    This class groups all the scripts to execute to populate the database with
+    This class groups all the scripts to populate the database with
     the initial datas.
-    To objectives:
+    The objectives:
         -> Respect the limitations of 10k rows from freemium account on Heroku
         -> Get the most common datas in order to minimize API Call during navigation
     """
@@ -22,12 +23,13 @@ class DBInit:
         """
         categories = Category.objects.all()
         products = Product.objects.all()
+        users = User.objects.all()
         if categories:
             categories.delete()
         if products:
             products.delete()
-
-        print("db clean process --> OK")
+        if users:
+            users.delete()
 
     def set_categories(self):
         """
