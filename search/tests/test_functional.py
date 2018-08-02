@@ -1,6 +1,7 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
 from django.contrib.auth.models import User
 from ..models import Product, Category, Profile
@@ -14,7 +15,9 @@ class SeleniumTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = WebDriver()
+        cls.options = Options()
+        cls.options.add_argument("--headless")
+        cls.selenium = WebDriver(firefox_options=cls.options)
         cls.selenium.implicitly_wait(10)
 
         categories = [
