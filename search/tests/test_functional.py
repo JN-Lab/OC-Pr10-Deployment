@@ -210,49 +210,6 @@ class SeleniumTests(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_login(self):
-        """
-        This method tests the connexion process
-        """
-
-        self.selenium.get('%s%s' % (self.live_server_url, '/login/'))
-        username_input = self.selenium.find_element_by_name("username")
-        username_input.send_keys('test-functional')
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('test-login-selenium')
-        self.selenium.find_element_by_css_selector(".btn-submit-user").click()
-
-        user = User.objects.get(username='test-functional')
-        logged = False
-        if user.is_authenticated:
-            logged = True
-
-        self.assertEqual(logged, True)
-
-    def test_register(self):
-        """
-        This method tests the registration process
-        """
-        
-        self.selenium.get('%s%s' % (self.live_server_url, '/register/'))
-        username_input = self.selenium.find_element_by_name("username")
-        username_input.send_keys('test-register')
-        mail_input = self.selenium.find_element_by_name("mail")
-        mail_input.send_keys('test_register@gmail.com')
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('secret-password')
-        password_check_input = self.selenium.find_element_by_name("password_check")
-        password_check_input.send_keys('secret-password')
-
-        self.selenium.find_element_by_css_selector(".btn-submit-user").click()
-
-        user = User.objects.get(username='test-functional')
-        logged = False
-        if user.is_authenticated:
-            logged = True
-
-        self.assertEqual(logged, True)
-
     def test_create_connect_search(self):
         """
         This method tests a registration, then a connexion, then a research
