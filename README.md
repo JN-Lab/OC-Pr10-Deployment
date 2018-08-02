@@ -1,10 +1,10 @@
-# OC-Pr8-OpenFoodFacts-App
-Repository for Project 8 from Openclassrooms cursus in Software Development
+# OC-Pr10-Deployment
+Repository for Project 10 from Openclassrooms cursus in Software Development
 
 ## Project Description
 
 This is a web application built with **Django** to help user to find healthier products of their favorites food.
-The application is deployed on **Heroku**.
+The objective of this project is to deploy the application from project8 on Digital Ocean server.
 
 ### Simplified App Structure
 

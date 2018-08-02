@@ -1,8 +1,7 @@
-../.vscode
-../.sass-cache
-../env
+/env
 geckodriver.log
 purbeurre_platform/__pycache__/
+purbeurre_platform/settings/__pycache__/
 search/__pycache__/
 search/migrations/__pycache__/
 search/utils/__pycache__/

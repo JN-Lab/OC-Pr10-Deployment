@@ -21,16 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '$yd7z#yaxkoyvrqifln@u3@_6e7kb=tvaw9^3f*b^o(=p07wnf')
+SECRET_KEY = '$yd7z#yaxkoyvrqifln@u3@_6e7kb=tvaw9^3f*b^o(=p07wnf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get('ENV') == 'PRODUCTION':
-    DEBUG = False
-else:
-    DEBUG = True
+DEBUG = True
 
-ALLOWED_HOSTS = ['jn-lab-p8.herokuapp.com', '127.0.0.1']
-
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -54,7 +50,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'purbeurre_platform.urls'
@@ -141,23 +136,9 @@ STATIC_URL = '/static/'
 
 INTERNAL_IPS = ['127.0.0.1']
 
-if os.environ.get('ENV') == 'PRODUCTION':
-    # Static files settings
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-    # Extra places for collectstatic to find static files.
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static"),
-    ]
-
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(db_from_env)
-else:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static"),
-        os.path.join(BASE_DIR, "search/static"),
-    ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "search/static"),
+]
