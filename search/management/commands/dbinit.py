@@ -163,10 +163,12 @@ class DBInit:
         """
         This method injects a category into the database
         """
-        Category.objects.create(name=category["name"],
-                                api_id=category["id"],
-                                total_products=category["products"],
-                                enough_good_nutriscore=True)
+        category_exists = Category.objects.filter(api_id=category["id"]).exists()
+        if not category_exists:
+            Category.objects.create(name=category["name"],
+                                    api_id=category["id"],
+                                    total_products=category["products"],
+                                    enough_good_nutriscore=True)
 
     def _inject_products(self, product):
         """
@@ -208,8 +210,21 @@ class Command(BaseCommand):
     This class describe the different actions to realize when the dbinit command
     is launched.
     """
+
+    def add_arguments(self, parser):
+        parser.add_arguments(
+            '--cleandb',
+            action='store_true',
+            dest='cleandb',
+            help="""All the elements from the database are deleted before
+            the update""",
+        )
+
     def handle(self, **options):
         db_init = DBInit()
-        db_init.clean_db()
+    
+        if options['cleandb']:
+            db_init.clean_db()
+    
         db_init.set_categories()
         db_init.set_products()

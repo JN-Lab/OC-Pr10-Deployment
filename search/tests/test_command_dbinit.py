@@ -80,7 +80,7 @@ class TestCommandDBInit(TestCase):
                 "nutrition_grade_fr": "a",
                 "generic_name_fr" : "enfin un truc qui se mange",
                 "categories_hierarchy": [
-                    "en:grains",
+                    "en:cereales",
                     "en:plant-based-foods-and-beverages",
                 ],
             },
@@ -168,6 +168,12 @@ class TestCommandDBInit(TestCase):
                     "name": "Aliments et boissons à base de végétaux",
                     "url": "https://fr.openfoodfacts.org/categorie/aliments-et-boissons-a-base-de-vegetaux",
                     "id": "en:plant-based-foods-and-beverages"
+                },
+                {
+                    "id": "en:cereales",
+                    "url": "https://fr.openfoodfacts.org/categorie/cereales",
+                    "products": 150,
+                    "name": "grains"
                 },
                 {
                     "id": "en:magic-beverages",
@@ -362,4 +368,86 @@ class TestCommandDBInit(TestCase):
         """
         The objective is to test if the update works when there are some datas in the database
         """
-        pass
+        # config of mock return value
+        mock_get_categories_from_api.return_value = self.categories_api_return
+        mock_api_product.return_value = self.products_api_return
+
+        # operation from dbinit --create commands
+        self.db_init.set_categories()
+        self.db_init.set_products()
+
+        # tests
+        users = User.objects.all().exists()
+        self.assertEqual(users, True)
+
+        user_number = User.objects.all().count()
+        self.assertEqual(user_number, 2)
+
+        users = User.objects.all()
+        users_result = [
+            "<User: test-ref>",
+            "<User: test-update>",
+        ]
+        self.assertQuerysetEqual(users, users_result, ordered=False)
+
+        profiles = Profile.objects.all().exists()
+        self.assertEqual(profiles, True)
+
+        profile_number = Profile.objects.all().count()
+        self.assertEqual(profile_number, 2)
+
+        user = User.objects.get(username='test-ref')
+        user_product_numb = user.profile.products.all().count()
+        self.assertEqual(user_product_numb, 2)
+
+        user_products = user.profile.products.all()
+        user_products_result = [
+            "<Product: haricots magiques>",
+            "<Product: perroquet>",
+        ]
+        self.assertQuerysetEqual(user_products, user_products_result, ordered=False)
+
+        user = User.objects.get(username='test-update')
+        user_product_numb = user.profile.products.all().count()
+        self.assertEqual(user_product_numb, 2)
+
+        user_products = user.profile.products.all()
+        user_products_result = [
+            "<Product: criquets>",
+            "<Product: poissons fées>",
+        ]
+        self.assertQuerysetEqual(user_products, user_products_result, ordered=False)
+
+        category_number = Category.objects.all().count()
+        self.assertEqual(category_number, 5)
+
+        product_number = Product.objects.all().count()
+        self.assertEqual(product_number, 13)
+
+        categories = Category.objects.all()
+        categories_result = [
+            "<Category: boissons magiques>",
+            "<Category: nourritures magiques>",
+            "<Category: grains>",
+            "<Category: oiseaux>",
+            "<Category: insectes>",
+        ]
+        self.assertQuerysetEqual(categories, categories_result, ordered=False)
+
+        products = Product.objects.all()
+        products_result = [
+            "<Product: haricots magiques>",
+            "<Product: perroquet>",
+            "<Product: muesli au chocolat>",
+            "<Product: criquets>",
+            "<Product: poissons fées>",
+            "<Product: potion magique de sante>",
+            "<Product: potion de bave de crapaud>",
+            "<Product: potion de nutella>",
+            "<Product: potion musclor>",
+            "<Product: potion de bouse>",
+            "<Product: potion de grand mere>",
+            "<Product: jus de chaussettes>",
+            "<Product: liquide inconnu>",
+        ]
+        self.assertQuerysetEqual(products, products_result, ordered=False)
