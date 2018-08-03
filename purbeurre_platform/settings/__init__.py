@@ -137,4 +137,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "search/static"),
 ]
 
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')

@@ -2,6 +2,7 @@
 geckodriver.log
 purbeurre_platform/__pycache__/
 purbeurre_platform/settings/__pycache__/
+purbeurre_platform/settings/production.py
 search/__pycache__/
 search/migrations/__pycache__/
 search/utils/__pycache__/
